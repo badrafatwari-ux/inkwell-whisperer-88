@@ -60,7 +60,7 @@ function BookLayout() {
           return (
             <Link
               key={t.key}
-              to={t.key ? `/books/$bookId/${t.key}` : "/books/$bookId"}
+              to={t.to}
               params={{ bookId }}
               className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium ${
                 active ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"
