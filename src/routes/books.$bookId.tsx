@@ -9,12 +9,12 @@ export const Route = createFileRoute("/books/$bookId")({
 });
 
 const tabs = [
-  { key: "", label: "Overview" },
-  { key: "chapters", label: "Chapters" },
-  { key: "outline", label: "Outline" },
-  { key: "characters", label: "Characters" },
-  { key: "locations", label: "Locations" },
-  { key: "world", label: "World" },
+  { key: "", label: "Overview", to: "/books/$bookId" },
+  { key: "chapters", label: "Chapters", to: "/books/$bookId/chapters" },
+  { key: "outline", label: "Outline", to: "/books/$bookId/outline" },
+  { key: "characters", label: "Characters", to: "/books/$bookId/characters" },
+  { key: "locations", label: "Locations", to: "/books/$bookId/locations" },
+  { key: "world", label: "World", to: "/books/$bookId/world" },
 ] as const;
 
 function BookLayout() {
