@@ -313,3 +313,112 @@ export function touchBook(id: string) {
     books: d.books.map((b) => (b.id === id ? { ...b, updatedAt: Date.now() } : b)),
   }));
 }
+
+/* ---------- chapters ---------- */
+
+export function createChapter(bookId: string, partial: Partial<Chapter> = {}): Chapter {
+  const existing = getData().chapters.filter((c) => c.bookId === bookId);
+  const chapter: Chapter = {
+    id: uid(),
+    bookId,
+    number: partial.number ?? existing.length + 1,
+    title: partial.title?.trim() || `Chapter ${existing.length + 1}`,
+    summary: partial.summary ?? "",
+    goal: partial.goal ?? "",
+    conflict: partial.conflict ?? "",
+    characters: partial.characters ?? "",
+    location: partial.location ?? "",
+    notes: partial.notes ?? "",
+    targetWords: partial.targetWords ?? 1500,
+    status: partial.status ?? "Idea",
+    content: partial.content ?? "",
+    updatedAt: Date.now(),
+  };
+  update((d) => ({ ...d, chapters: [...d.chapters, chapter] }));
+  touchBook(bookId);
+  return chapter;
+}
+
+export function updateChapter(id: string, patch: Partial<Chapter>) {
+  update((d) => ({
+    ...d,
+    chapters: d.chapters.map((c) => (c.id === id ? { ...c, ...patch, updatedAt: Date.now() } : c)),
+    books: d.books.map((b) =>
+      b.id === d.chapters.find((c) => c.id === id)?.bookId ? { ...b, updatedAt: Date.now() } : b,
+    ),
+  }));
+}
+
+export function deleteChapter(id: string) {
+  update((d) => ({ ...d, chapters: d.chapters.filter((c) => c.id !== id) }));
+}
+
+export function moveChapter(bookId: string, id: string, dir: -1 | 1) {
+  update((d) => {
+    const list = d.chapters.filter((c) => c.bookId === bookId).sort((a, b) => a.number - b.number);
+    const i = list.findIndex((c) => c.id === id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= list.length) return d;
+    [list[i], list[j]] = [list[j], list[i]];
+    const renumbered = new Map(list.map((c, idx) => [c.id, idx + 1]));
+    return {
+      ...d,
+      chapters: d.chapters.map((c) => (renumbered.has(c.id) ? { ...c, number: renumbered.get(c.id)! } : c)),
+    };
+  });
+}
+
+/* ---------- generic collections ---------- */
+
+type CollectionKey = "characters" | "locations" | "world" | "outline" | "notes";
+
+export function addItem<K extends CollectionKey>(key: K, item: AppData[K][number]) {
+  update((d) => ({ ...d, [key]: [...(d[key] as unknown[]), item] }) as AppData);
+}
+
+export function patchItem<K extends CollectionKey>(key: K, id: string, patch: Record<string, unknown>) {
+  update(
+    (d) =>
+      ({
+        ...d,
+        [key]: (d[key] as Array<{ id: string }>).map((it) => (it.id === id ? { ...it, ...patch } : it)),
+      }) as AppData,
+  );
+}
+
+export function removeItem<K extends CollectionKey>(key: K, id: string) {
+  update(
+    (d) => ({ ...d, [key]: (d[key] as Array<{ id: string }>).filter((it) => it.id !== id) }) as AppData,
+  );
+}
+
+export function newCharacter(bookId: string): Character {
+  return {
+    id: uid(),
+    bookId,
+    name: "",
+    role: "",
+    description: "",
+    personality: "",
+    goal: "",
+    motivation: "",
+    fear: "",
+    strengths: "",
+    weaknesses: "",
+    background: "",
+    arc: "",
+    notes: "",
+  };
+}
+
+export function newLocation(bookId: string): LocationEntry {
+  return { id: uid(), bookId, name: "", description: "", atmosphere: "", details: "", notes: "" };
+}
+
+export function newWorldNote(bookId: string): WorldNote {
+  return { id: uid(), bookId, category: "History", title: "", content: "" };
+}
+
+export function newOutlineItem(bookId: string): OutlineItem {
+  return { id: uid(), bookId, title: "", summary: "", notes: "" };
+}
