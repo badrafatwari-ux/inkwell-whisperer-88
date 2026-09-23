@@ -24,13 +24,14 @@ export const NAME_LISTS = {
 } as const;
 
 export type NameListKey = keyof typeof NAME_LISTS;
-export const NAME_LIST_KEYS = Object.keys(NAME_LISTS) as NameListKey[];
+export const NAME_LIST_KEYS = Object.keys(NAME_LISTS) as [NameListKey, ...NameListKey[]];
 
-export function randomName(key: NameListKey, count = 5) {
-  const list = [...NAME_LISTS[key]];
+export function randomName(key: NameListKey, count = 5): string[] {
+  const list: string[] = [...NAME_LISTS[key]];
   const out: string[] = [];
   for (let i = 0; i < count && list.length; i++) {
-    out.push(list.splice(Math.floor(Math.random() * list.length), 1)[0]);
+    const [picked] = list.splice(Math.floor(Math.random() * list.length), 1);
+    if (picked) out.push(picked);
   }
   return out;
 }

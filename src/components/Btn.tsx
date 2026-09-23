@@ -26,15 +26,24 @@ export function Btn({
   );
 }
 
+type AnyLinkProps = {
+  to: string;
+  params?: Record<string, string>;
+  search?: Record<string, unknown>;
+  [key: string]: unknown;
+};
+
+const AnyLink = Link as unknown as React.ComponentType<AnyLinkProps & { className?: string; children?: ReactNode }>;
+
 export function LinkBtn({
   variant = "primary",
   className = "",
   children,
   ...props
-}: React.ComponentProps<typeof Link> & { variant?: Variant; children?: ReactNode }) {
+}: AnyLinkProps & { variant?: Variant; children?: ReactNode }) {
   return (
-    <Link {...props} className={`${base} ${variants[variant]} ${className}`}>
+    <AnyLink {...props} className={`${base} ${variants[variant]} ${className}`}>
       {children}
-    </Link>
+    </AnyLink>
   );
 }
