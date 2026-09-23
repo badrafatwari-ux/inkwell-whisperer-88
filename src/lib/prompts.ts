@@ -96,14 +96,14 @@ export const PROMPTS: Record<PromptCategory, string[]> = {
   ],
 };
 
-export function randomPrompt(category: PromptCategory, exclude?: string) {
+export function randomPrompt(category: PromptCategory, exclude?: string): string {
   const list = PROMPTS[category];
   const pool = list.length > 1 && exclude ? list.filter((p) => p !== exclude) : list;
-  return pool[Math.floor(Math.random() * pool.length)];
+  return pool[Math.floor(Math.random() * pool.length)]!;
 }
 
-export function anyRandomPrompt() {
+export function anyRandomPrompt(): { category: PromptCategory; text: string } {
   const cats = PROMPT_CATEGORIES;
-  const cat = cats[Math.floor(Math.random() * cats.length)];
+  const cat = cats[Math.floor(Math.random() * cats.length)]!;
   return { category: cat, text: randomPrompt(cat) };
 }
