@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IdeasRouteImport } from './routes/ideas'
+import { Route as NotesRouteImport } from './routes/notes'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ToolsRouteImport } from './routes/tools'
 import { Route as BooksIndexRouteImport } from './routes/books.index'
 import { Route as BooksBookIdRouteImport } from './routes/books.$bookId'
 import { Route as BooksNewRouteImport } from './routes/books.new'
@@ -21,6 +24,7 @@ import { Route as BooksBookIdEditRouteImport } from './routes/books.$bookId.edit
 import { Route as BooksBookIdLocationsRouteImport } from './routes/books.$bookId.locations'
 import { Route as BooksBookIdOutlineRouteImport } from './routes/books.$bookId.outline'
 import { Route as BooksBookIdWorldRouteImport } from './routes/books.$bookId.world'
+import { Route as BooksBookIdWriteChapterIdRouteImport } from './routes/books_.$bookId.write.$chapterId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +34,21 @@ const IndexRoute = IndexRouteImport.update({
 const IdeasRoute = IdeasRouteImport.update({
   id: '/ideas',
   path: '/ideas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotesRoute = NotesRouteImport.update({
+  id: '/notes',
+  path: '/notes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsRoute = ToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BooksIndexRoute = BooksIndexRouteImport.update({
@@ -82,10 +101,19 @@ const BooksBookIdWorldRoute = BooksBookIdWorldRouteImport.update({
   path: '/world',
   getParentRoute: () => BooksBookIdRoute,
 } as any)
+const BooksBookIdWriteChapterIdRoute =
+  BooksBookIdWriteChapterIdRouteImport.update({
+    id: '/books_/$bookId/write/$chapterId',
+    path: '/books/$bookId/write/$chapterId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ideas': typeof IdeasRoute
+  '/notes': typeof NotesRoute
+  '/settings': typeof SettingsRoute
+  '/tools': typeof ToolsRoute
   '/books/$bookId': typeof BooksBookIdRouteWithChildren
   '/books/new': typeof BooksNewRoute
   '/books/': typeof BooksIndexRoute
@@ -96,10 +124,14 @@ export interface FileRoutesByFullPath {
   '/books/$bookId/outline': typeof BooksBookIdOutlineRoute
   '/books/$bookId/world': typeof BooksBookIdWorldRoute
   '/books/$bookId/': typeof BooksBookIdIndexRoute
+  '/books/$bookId/write/$chapterId': typeof BooksBookIdWriteChapterIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ideas': typeof IdeasRoute
+  '/notes': typeof NotesRoute
+  '/settings': typeof SettingsRoute
+  '/tools': typeof ToolsRoute
   '/books/new': typeof BooksNewRoute
   '/books': typeof BooksIndexRoute
   '/books/$bookId/chapters': typeof BooksBookIdChaptersRoute
@@ -109,11 +141,15 @@ export interface FileRoutesByTo {
   '/books/$bookId/outline': typeof BooksBookIdOutlineRoute
   '/books/$bookId/world': typeof BooksBookIdWorldRoute
   '/books/$bookId': typeof BooksBookIdIndexRoute
+  '/books/$bookId/write/$chapterId': typeof BooksBookIdWriteChapterIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ideas': typeof IdeasRoute
+  '/notes': typeof NotesRoute
+  '/settings': typeof SettingsRoute
+  '/tools': typeof ToolsRoute
   '/books/$bookId': typeof BooksBookIdRouteWithChildren
   '/books/new': typeof BooksNewRoute
   '/books/': typeof BooksIndexRoute
@@ -124,12 +160,16 @@ export interface FileRoutesById {
   '/books/$bookId/outline': typeof BooksBookIdOutlineRoute
   '/books/$bookId/world': typeof BooksBookIdWorldRoute
   '/books/$bookId/': typeof BooksBookIdIndexRoute
+  '/books_/$bookId/write/$chapterId': typeof BooksBookIdWriteChapterIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/ideas'
+    | '/notes'
+    | '/settings'
+    | '/tools'
     | '/books/$bookId'
     | '/books/new'
     | '/books/'
@@ -140,10 +180,14 @@ export interface FileRouteTypes {
     | '/books/$bookId/outline'
     | '/books/$bookId/world'
     | '/books/$bookId/'
+    | '/books/$bookId/write/$chapterId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/ideas'
+    | '/notes'
+    | '/settings'
+    | '/tools'
     | '/books/new'
     | '/books'
     | '/books/$bookId/chapters'
@@ -153,10 +197,14 @@ export interface FileRouteTypes {
     | '/books/$bookId/outline'
     | '/books/$bookId/world'
     | '/books/$bookId'
+    | '/books/$bookId/write/$chapterId'
   id:
     | '__root__'
     | '/'
     | '/ideas'
+    | '/notes'
+    | '/settings'
+    | '/tools'
     | '/books/$bookId'
     | '/books/new'
     | '/books/'
@@ -167,14 +215,19 @@ export interface FileRouteTypes {
     | '/books/$bookId/outline'
     | '/books/$bookId/world'
     | '/books/$bookId/'
+    | '/books_/$bookId/write/$chapterId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IdeasRoute: typeof IdeasRoute
+  NotesRoute: typeof NotesRoute
+  SettingsRoute: typeof SettingsRoute
+  ToolsRoute: typeof ToolsRoute
   BooksBookIdRoute: typeof BooksBookIdRouteWithChildren
   BooksNewRoute: typeof BooksNewRoute
   BooksIndexRoute: typeof BooksIndexRoute
+  BooksBookIdWriteChapterIdRoute: typeof BooksBookIdWriteChapterIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -191,6 +244,27 @@ declare module '@tanstack/react-router' {
       path: '/ideas'
       fullPath: '/ideas'
       preLoaderRoute: typeof IdeasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notes': {
+      id: '/notes'
+      path: '/notes'
+      fullPath: '/notes'
+      preLoaderRoute: typeof NotesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools': {
+      id: '/tools'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/books/': {
@@ -263,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BooksBookIdWorldRouteImport
       parentRoute: typeof BooksBookIdRoute
     }
+    '/books_/$bookId/write/$chapterId': {
+      id: '/books_/$bookId/write/$chapterId'
+      path: '/books/$bookId/write/$chapterId'
+      fullPath: '/books/$bookId/write/$chapterId'
+      preLoaderRoute: typeof BooksBookIdWriteChapterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -293,9 +374,13 @@ const BooksBookIdRouteWithChildren = BooksBookIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IdeasRoute: IdeasRoute,
+  NotesRoute: NotesRoute,
+  SettingsRoute: SettingsRoute,
+  ToolsRoute: ToolsRoute,
   BooksBookIdRoute: BooksBookIdRouteWithChildren,
   BooksNewRoute: BooksNewRoute,
   BooksIndexRoute: BooksIndexRoute,
+  BooksBookIdWriteChapterIdRoute: BooksBookIdWriteChapterIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
