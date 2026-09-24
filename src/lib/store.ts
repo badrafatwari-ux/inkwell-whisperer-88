@@ -359,7 +359,9 @@ export function moveChapter(bookId: string, id: string, dir: -1 | 1) {
     const i = list.findIndex((c) => c.id === id);
     const j = i + dir;
     if (i < 0 || j < 0 || j >= list.length) return d;
-    [list[i], list[j]] = [list[j], list[i]];
+    const a = list[i]!;
+    list[i] = list[j]!;
+    list[j] = a;
     const renumbered = new Map(list.map((c, idx) => [c.id, idx + 1]));
     return {
       ...d,

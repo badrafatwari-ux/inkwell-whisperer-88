@@ -120,7 +120,7 @@ function ChaptersPage() {
 
               <div className="mt-3 flex items-center gap-2">
                 <Link
-                  to="/write/$bookId/$chapterId"
+                  to="/books/$bookId/write/$chapterId"
                   params={{ bookId, chapterId: c.id }}
                   className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground"
                 >
