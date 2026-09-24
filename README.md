@@ -27,3 +27,13 @@ npm run dev
 - TypeScript
 - React
 - Tailwind CSS
+
+## Android (Capacitor)
+
+1. `npm install`
+2. `npm run build` (outputs the offline app to `dist/client`)
+3. `npx cap add android` (first time only)
+4. `npx cap sync android`
+5. `npx cap open android` — then run from Android Studio.
+
+After any change, repeat steps 2 and 4.
