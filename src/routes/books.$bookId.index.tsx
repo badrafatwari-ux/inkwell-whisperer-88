@@ -64,7 +64,7 @@ function BookOverview() {
 
       <div className="grid grid-cols-2 gap-3">
         {next ? (
-          <LinkBtn to="/write/$bookId/$chapterId" params={{ bookId, chapterId: next.id }}>
+          <LinkBtn to="/books/$bookId/write/$chapterId" params={{ bookId, chapterId: next.id }}>
             <PenLine className="size-4" /> Write
           </LinkBtn>
         ) : (
